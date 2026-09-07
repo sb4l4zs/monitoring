@@ -1,5 +1,6 @@
 package com.aldisued.iot.monitoring.exception;
 
+import com.aldisued.iot.monitoring.exception.alert.NoAlertByIdException;
 import com.aldisued.iot.monitoring.exception.sensor.SensorNameAlreadyExistsException;
 import com.aldisued.iot.monitoring.exception.sensorReading.NoSensorFoundByIdException;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,13 @@ public class MonitoringExceptionHandler {
     public ResponseEntity<String> handleSensorNameExists(SensorNameAlreadyExistsException exception) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(NoAlertByIdException.class)
+    public ResponseEntity<String> handleNoAlertById(NoAlertByIdException exception) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
     }
 }
