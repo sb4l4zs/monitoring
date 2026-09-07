@@ -1,5 +1,6 @@
 package com.aldisued.iot.monitoring.exception;
 
+import com.aldisued.iot.monitoring.exception.alert.AlertWithoutExistingSensorException;
 import com.aldisued.iot.monitoring.exception.alert.NoAlertByIdException;
 import com.aldisued.iot.monitoring.exception.sensor.SensorNameAlreadyExistsException;
 import com.aldisued.iot.monitoring.exception.sensorReading.NoSensorFoundByIdException;
@@ -30,6 +31,13 @@ public class MonitoringExceptionHandler {
     public ResponseEntity<String> handleNoAlertById(NoAlertByIdException exception) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(AlertWithoutExistingSensorException.class)
+    public ResponseEntity<String> handleAlertWithoutExistingSensor(AlertWithoutExistingSensorException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage());
     }
 }
