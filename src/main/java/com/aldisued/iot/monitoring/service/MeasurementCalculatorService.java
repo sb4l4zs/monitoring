@@ -25,8 +25,25 @@ public class MeasurementCalculatorService {
     }
 
     public List<Double> getMovingAverage(List<Double> data, int windowSize) {
-        // TODO: Task 10
-        return List.of();
+        List<Double> movingAverages = new ArrayList<>();
+        if (windowSize < 1 || data.isEmpty())
+            throw new IllegalArgumentException("windowSize must be greater than 0 and data can't be empty");
+        else if (windowSize > data.size())
+            return data;
+        else {
+            for (int i = 0; i <= data.size() - windowSize; i++) {
+                movingAverages.add(calculateAverage(data, i, windowSize));
+            }
+        }
+        return movingAverages;
+    }
+
+    private Double calculateAverage(List<Double> data, int startIndex, int windowSize) {
+        Double sum = 0.0;
+        for (int i = startIndex; i < startIndex + windowSize; i++) {
+            sum += data.get(i);
+        }
+        return sum / windowSize;
     }
 
 }
