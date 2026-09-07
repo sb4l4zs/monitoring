@@ -3,6 +3,7 @@ package com.aldisued.iot.monitoring.service;
 import com.aldisued.iot.monitoring.dto.AlertDto;
 import com.aldisued.iot.monitoring.entity.Alert;
 import com.aldisued.iot.monitoring.exception.alert.NoAlertByIdException;
+import com.aldisued.iot.monitoring.exception.sensorReading.NoSensorFoundByIdException;
 import com.aldisued.iot.monitoring.repository.AlertRepository;
 import com.aldisued.iot.monitoring.repository.SensorRepository;
 import java.util.UUID;
@@ -24,8 +25,15 @@ public class AlertService {
   }
 
   public Alert saveAlert(AlertDto alertDto) {
-    // TODO: Task 6
-    return null;
+    Alert alert = new Alert(
+            alertDto.message(),
+            alertDto.timestamp(),
+            sensorRepository.findById(alertDto.sensorId())
+                    .orElseThrow(() -> new NoSensorFoundByIdException("Sensor with id " + alertDto.sensorId() + " not found"))
+    );
+    Alert savedAlert = alertRepository.save(alert);
+    kafkaTemplate.send("alerts", alertDto);
+    return savedAlert;
   }
 
   public AlertDto findLastAlertBySensorId(UUID sensorId) {
