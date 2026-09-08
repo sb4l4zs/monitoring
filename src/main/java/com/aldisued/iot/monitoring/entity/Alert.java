@@ -1,6 +1,8 @@
 package com.aldisued.iot.monitoring.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +21,7 @@ public class Alert {
   private LocalDateTime timestamp;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "sensor_id")
   private Sensor sensor;
 
